@@ -1,0 +1,53 @@
+.TH lua-daemon 3 "July 10, 2012" "version 1.0"
+.SH NAME
+lua-daemon - Lua module for daemonizing a process
+.SH SYNOPSIS
+.B require 'daemon'
+.sp
+.BR daemon.daemonize( [options] )
+.br
+.SH DESCRIPTION
+Daemonizes a process.
+.PP
+If options is specified, it is a comma-delimited string that includes any of
+the following:
+
+.TP
+.B nochidr
+don't chdir("/")
+.TP
+.B noclose
+don't close inherited file descriptors
+.TP
+.B nostdfds
+don't reopen stdin, stdout, and stderr to /dev/null
+.TP
+.B noumask0
+don't do a umask(0)
+
+.SS Return value
+On succcess,
+.BR daemonize ()
+returns nil.  On error, an error is raised.
+
+.SH EXAMPLES
+The following example uses the 
+.BR lua-posix 
+module <https://github.com/rrthomas/luaposix>
+
+    require 'posix'
+    require 'daemon'
+
+    daemon.daemonize('nochdir,noumask0')
+    posix.openlog('myprog', 'p')
+    i = 0
+    while i do
+        posix.syslog(1, i .. 'Hello, World!')
+        posix.sleep(5)
+        i = i + 1
+    end
+
+.SH Authors
+Stephen M. Herwig <smherwig@gmail.com>
+
+
