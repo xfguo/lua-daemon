@@ -156,6 +156,12 @@ static const luaL_Reg R[] =
 LUALIB_API int
 luaopen_daemon(lua_State *L)
 {
+#if LUA_VERSION_NUM == 502
+    luaL_newlib (L, R);
+    lua_pushvalue (L, -1);
+    lua_setglobal (L, DAEMON_LIBNAME);
+#else
     luaL_register(L, DAEMON_LIBNAME, R);
+#endif
     return 1;
 }
